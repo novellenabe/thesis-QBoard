@@ -55,8 +55,8 @@ class MainScreen(QtWidgets.QWidget):
         self.LOCATION_UNIQUE_ID.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)
         LOCATION_UNIQUE_ID_layout = QVBoxLayout() 
         LOCATION_UNIQUE_ID_widget = QWidget()
-        LOCATION_UNIQUE_ID_widget.setFixedWidth(150)
-        LOCATION_UNIQUE_ID_widget.setFixedHeight(45)
+        LOCATION_UNIQUE_ID_widget.setFixedWidth(230)
+        LOCATION_UNIQUE_ID_widget.setFixedHeight(47)
 
         LOCATION_UNIQUE_ID_widget.setObjectName("LOCATION_UNIQUE_ID_widget")
         LOCATION_UNIQUE_ID_layout.addWidget(self.LOCATION_UNIQUE_ID)
@@ -123,13 +123,50 @@ class MainScreen(QtWidgets.QWidget):
         CURTAINS_TOP_layout.addWidget(QUEUEING_PASSENGERS_widget)
         
         
+        
         CURTAINS_BOTTOM = QWidget()
         CURTAINS_BOTTOM.setObjectName("CURTAINS_BOTTOM")
         CURTAINS_BOTTOM.setFixedHeight(45)
         
         
+        # TODO: Put destination here
         BODY_main_content = QWidget()
         BODY_main_content.setObjectName("BODY_main_content")
+        
+        
+        # TODO: MAKE THE INDIVIDUAL ROWS
+        ######################## DUMMY CONTENT HERE ########################
+    
+        # TERMINAL TITLE
+        TERMINAL_TITLE_N1 = QLabel("SAS")  # Number 
+        TERMINAL_TITLE_N1.setObjectName("TERMINAL_TITLE_N1")
+        TERMINAL_TITLE_N1.setAlignment(Qt.AlignCenter)
+        TERMINAL_TITLE_N1_widget = QWidget()
+        TERMINAL_TITLE_N1_layout = QVBoxLayout()
+        TERMINAL_TITLE_N1_layout.addWidget(TERMINAL_TITLE_N1)
+        TERMINAL_TITLE_N1_layout.setContentsMargins(0, 0, 0, 0)
+        TERMINAL_TITLE_N1_layout.setSpacing(0)
+        TERMINAL_TITLE_N1_widget.setFixedWidth(300)
+        TERMINAL_TITLE_N1_widget.setLayout(TERMINAL_TITLE_N1_layout)
+        TERMINAL_TITLE_N1_widget.setObjectName("TERMINAL_TITLE_widget")
+        #CURTAINS_TOP_layout.addWidget(TERMINAL_TITLE_N1_widget)        # TODO: ADD TO INDEPENDENT ROW
+        
+        # QUEUEING PASSENGERS
+        QUEUEING_PASSENGERS_N1 = QLabel("3")     # Number of queuing passengers
+        QUEUEING_PASSENGERS_N1.setObjectName("QUEUEING_PASSENGERS_N1")
+        QUEUEING_PASSENGERS_N1.setAlignment(Qt.AlignCenter)
+        QUEUEING_PASSENGERS_N1_widget = QWidget()
+        QUEUEING_PASSENGERS_N1_layout = QVBoxLayout()
+        QUEUEING_PASSENGERS_N1_layout.addWidget(QUEUEING_PASSENGERS_N1)
+        QUEUEING_PASSENGERS_N1_layout.setContentsMargins(0, 0, 0, 0)
+        QUEUEING_PASSENGERS_N1_layout.setSpacing(0)
+        QUEUEING_PASSENGERS_N1_widget.setFixedWidth(300)
+        QUEUEING_PASSENGERS_N1_widget.setLayout(QUEUEING_PASSENGERS_N1_layout)
+        QUEUEING_PASSENGERS_N1_widget.setObjectName("QUEUEING_PASSENGERS_N1_widget")
+        #CURTAINS_TOP_layout.addWidget(QUEUEING_PASSENGERS_widget)      # TODO: ADD TO INDEPENDENT ROW
+        
+        
+        
         
         BODY_layout.addWidget(CURTAINS_TOP_widget)
         BODY_layout.addWidget(BODY_main_content)
@@ -234,7 +271,7 @@ class MainScreen(QtWidgets.QWidget):
         current_time = QTime.currentTime().toString("hh:mm AP")
         self.time_label.setText(current_time)
         
-        
+              
     def on_LOGOUT_button_clicked(self):
         print("Hello World")
         self.auth.logout()
@@ -256,7 +293,8 @@ class MainScreen(QtWidgets.QWidget):
             if battery:
                 percent = battery.percent
                 status = "Charging" if battery.power_plugged else "Discharging"
-                self.LOCATION_UNIQUE_ID.setText(f"Battery: {percent:.0f}% ({status})")
+                #self.LOCATION_UNIQUE_ID.setText(f"Battery: {percent:.0f}% ({status})")
+                self.LOCATION_UNIQUE_ID.setText(f"Battery Life: {percent:.0f}%")
             else:
                 self.LOCATION_UNIQUE_ID.setText("Battery info not available.")
         except Exception as e:
@@ -267,5 +305,5 @@ class MainScreen(QtWidgets.QWidget):
         ''' DRIVERNAME_label, SHUTTLE_label'''
         #self.DRIVERNAME_label.setText(self.auth.get_current_username())
         self.DRIVERNAME_label.setText(self.auth.get_AppInfo("_username"))
-        self.SHUTTLE_label.setText("EvTrak 1")
+        self.SHUTTLE_label.setText(self.auth.get_AppInfo("_shuttleName"))
         print("Update MainScreen")

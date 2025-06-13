@@ -4,6 +4,9 @@ TO SETUP THE APPLICATION
 2. CLI: activate
 
 
+DOWNLOAD:
+
+
 
 TO RUN THE APPLICATION
 1. python3 shuttleDashboard_interface.py

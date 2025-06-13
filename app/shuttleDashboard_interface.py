@@ -63,7 +63,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.login_screen.switch_screen_signal.connect(self.swtich_to_screen)
         
         
-        self.auth.loggedIn.connect(self.update_MainScreen_Content)          
+        self.auth.loggedIn.connect(self.update_MainScreen_Content)        
         #self.screenChanged.connect(self.login_screen.changeScreen)                      # TEST
         
         # --- NEW: Connect current changed signal to detect screen loads ---
