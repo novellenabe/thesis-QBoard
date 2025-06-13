@@ -1,0 +1,9 @@
+TO SETUP THE APPLICATION
+1. Run venv in the .venv folder
+	>> .venv > Scripts > activate
+2. CLI: activate
+
+
+
+TO RUN THE APPLICATION
+1. python3 shuttleDashboard_interface.py

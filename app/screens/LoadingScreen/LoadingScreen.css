@@ -1,0 +1,28 @@
+QLabel {
+    color: black; /* Default text color */
+    font-size: 16px; /* Example font size */
+}
+
+QLabel[text="#1"] {
+    background-color: red;
+}
+
+QLabel[text="#2"] {
+    background-color: yellow;
+}
+
+QLabel[text="#3"] {
+    background-color: green;
+}
+
+QLabel[text="#4"] {
+    background-color: blue;
+}
+
+QLabel[text="#5"] {
+    background-color: purple;
+}
+
+QWidget {
+    background-color: white; /* Default background for the central widget */
+}

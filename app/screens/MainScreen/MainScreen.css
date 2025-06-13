@@ -1,0 +1,101 @@
+#central_Widget {
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
+#layout {
+	margin: 0;
+	padding: 0;
+}
+
+/* HEADER */
+#HEADER_widget {
+	background-color: #50A747;
+	margin: 0;
+	padding: 0;
+}
+
+#LOCATION_UNIQUE_ID {
+	color: #ffffff;
+	font-size: 24px;
+}
+
+#LOCATION_UNIQUE_ID_widget {
+	background-color: #373737;
+}
+
+#TIME_LABEL {
+	font-size: 34px;
+	color: white;
+}
+
+/* BODY */
+#BODY_widget {
+	background-color: white;
+	margin: 0;
+	padding: 0;
+}
+
+#CURTAINS_TOP_widget, #CURTAINS_BOTTOM {
+	background-color: #90E67F;
+}
+
+#BODY_main_content {
+	background-color: #ffffff;
+}
+
+#TERMINAL_TITLE, #QUEUEING_PASSENGERS {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+#TERMINAL_TITLE_widget, #QUEUEING_PASSENGERS_widget {
+	/*background-color: red;*/
+}
+
+/* BOTTOM */
+#BOTTOM_widget {
+	background-color: #50A747;
+	margin: 0;
+	padding: 0;
+}
+
+#PROFILE_widget {
+	/*background-color: red;*/
+}
+
+#DRIVERNAME_label {
+	font-size: 32px;
+	color: white;
+}
+
+#SHUTTLE_label {
+	font-size: 36px;
+	color: white;
+	font-weight: bold;
+}
+/*
+#DRIVERNAME_label, #SHUTTLE_label {
+	background-color: blue;
+}*/
+
+#LOGOUT_widget {
+	/*background-color: blue;*/
+}
+
+
+#LOGOUT_button {
+	background-color: #90E67F;
+	border: 2px solid black;	
+	font-size: 20px;
+}
+
+#LOGOUT_button:pressed {
+	background-color: #50A747;
+}
+
+/*
+#LOGOUT_button:hover {
+	background-color: red;
+}*/

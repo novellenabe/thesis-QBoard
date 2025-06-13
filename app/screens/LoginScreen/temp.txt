@@ -1,0 +1,163 @@
+import sys
+import os
+
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QRadioButton, QButtonGroup, QLineEdit, QSizePolicy)
+from PyQt5.QtGui import QIcon, QPixmap, QMovie
+from PyQt5.QtGui import QFont                   # For Fonts
+from PyQt5.QtCore import Qt                     # For alignment
+
+''' ERROR FILE HANDLING '''
+from file_handling import file_handling
+
+# PROBLEM. __init__ only executed once
+class LoginScreen(QtWidgets.QWidget):    
+    def __init__(self, parent=None, initialLoading = False):
+        super().__init__(parent)
+        self.loadStyles()
+        self.isLoading = initialLoading
+        self.LoginScreen(self.isLoading)
+    
+    def loadStyles(self):
+        stylesheet = file_handling.load_stylesheet("screens/LoginScreen/LoginScreen.css")
+        self.setStyleSheet(stylesheet)
+    
+    def LoginScreen(self, isLoading):
+        ''' PARENT LAYOUT ''' 
+        SELF_LAYOUT = QVBoxLayout()   
+        SELF_LAYOUT.setSpacing(0)
+        SELF_LAYOUT.setContentsMargins(0, 0, 0, 0)
+        
+        
+        CENTRAL_WIDGET = QWidget()
+        CENTRAL_WIDGET.setObjectName("CENTRAL_WIDGET")
+        self.CENTRAL_LAYOUT = QVBoxLayout(CENTRAL_WIDGET)   
+
+        self.CENTRAL_LAYOUT.setContentsMargins(0, 0, 0, 0)
+        self.CENTRAL_LAYOUT.setSpacing(0)
+
+        SELF_LAYOUT.addWidget(CENTRAL_WIDGET)
+        
+        ''' TOP WIDGET '''
+        # DISPALY UNIVERSITY IMAGE
+        UNIVERSITY_LABEL = QLabel(CENTRAL_WIDGET)
+        UNIVERSITY_LABEL.setFixedHeight(145)
+        UNIVERSITY_LABEL.setObjectName("university_title")
+        UNIVERSITY_LABEL_pixmap = QPixmap("assets/images/USC_logo.png")
+        scaled_pixmap = UNIVERSITY_LABEL_pixmap.scaled(500, 1000, Qt.KeepAspectRatio)
+        #UNIVERSITY_LABEL.setPixmap(UNIVERSITY_LABEL_pixmap)
+        UNIVERSITY_LABEL.setPixmap(scaled_pixmap)
+        UNIVERSITY_LABEL.setAlignment(Qt.AlignCenter)
+        self.CENTRAL_LAYOUT.addWidget(UNIVERSITY_LABEL)  # PUSH
+        
+        
+        ''' MIDDLE WIDGET '''
+        self.createMiddleWidget(self.isLoading)
+        '''
+        if isLoading:
+            self.GIF_LOADING_LABEL = QLabel()
+            self.loading("assets/gif/loading.gif")
+            CENTRAL_LAYOUT.addWidget(self.GIF_LOADING_LABEL, alignment=Qt.AlignCenter)
+        else:
+            MIDDLE_layout = QVBoxLayout()
+            MIDDLE_widget = QWidget()
+            MIDDLE_widget.setFixedHeight(131)
+            MIDDLE_widget.setLayout(MIDDLE_layout)
+            MIDDLE_widget.setObjectName("MIDDLE_widget")    
+            
+            # DISPALY SHUTTLE 1 DASHBOARD
+            dashboard_title_label = QLabel("Shuttle 1 Dashboard")
+            dashboard_title_label.setObjectName("dashboard_title")
+            dashboard_title_label.setAlignment(Qt.AlignCenter)
+            MIDDLE_layout.addWidget(dashboard_title_label)
+            
+            # DISPLAY PLACE YOUR ID IN THE DRIVER READER
+            dashboard_subtext_label = QLabel("Place your driver ID in the reader")
+            dashboard_subtext_label.setObjectName("DASHBOARD_subtext")
+            dashboard_subtext_label.setAlignment(Qt.AlignCenter)
+            MIDDLE_layout.addWidget(dashboard_subtext_label)
+            
+            CENTRAL_LAYOUT.addWidget(MIDDLE_widget)     # PUSH
+        '''
+        '''
+        MIDDLE_layout = QVBoxLayout()
+        MIDDLE_widget = QWidget()
+        MIDDLE_widget.setFixedHeight(131)
+        MIDDLE_widget.setLayout(MIDDLE_layout)
+        MIDDLE_widget.setObjectName("MIDDLE_widget")    
+        
+        # DISPALY SHUTTLE 1 DASHBOARD
+        dashboard_title_label = QLabel("Shuttle 1 Dashboard")
+        dashboard_title_label.setObjectName("dashboard_title")
+        dashboard_title_label.setAlignment(Qt.AlignCenter)
+        MIDDLE_layout.addWidget(dashboard_title_label)
+        
+        # DISPLAY PLACE YOUR ID IN THE DRIVER READER
+        dashboard_subtext_label = QLabel("Place your driver ID in the reader")
+        dashboard_subtext_label.setObjectName("DASHBOARD_subtext")
+        dashboard_subtext_label.setAlignment(Qt.AlignCenter)
+        MIDDLE_layout.addWidget(dashboard_subtext_label)
+        
+        CENTRAL_LAYOUT.addWidget(MIDDLE_widget)     # PUSH
+        '''
+        
+        
+        ''' LOADING '''
+        '''
+        self.GIF_LOADING_LABEL = QLabel()
+        self.loading("assets/gif/loading.gif")
+        CENTRAL_LAYOUT.addWidget(self.GIF_LOADING_LABEL, alignment=Qt.AlignCenter)
+        '''
+        
+        ''' BOTTOM WIDGET '''
+        BOTTOM_layout = QVBoxLayout()
+        BOTTOM_widget = QWidget()
+        BOTTOM_widget.setLayout(BOTTOM_layout)
+        BOTTOM_widget.setObjectName("bottom_widget")
+        BOTTOM_widget.setFixedHeight(100)
+        self.CENTRAL_LAYOUT.addWidget(BOTTOM_widget)     # PUSH
+        
+        self.setLayout(SELF_LAYOUT)
+        
+        #self.update()
+        
+        
+    def createMiddleWidget(self, isLoading):
+        if isLoading:
+            self.GIF_LOADING_LABEL = QLabel()
+            self.loading("assets/gif/loading.gif")
+            self.CENTRAL_LAYOUT.addWidget(self.GIF_LOADING_LABEL, alignment=Qt.AlignCenter)
+        else:
+            MIDDLE_layout = QVBoxLayout()
+            MIDDLE_widget = QWidget()
+            MIDDLE_widget.setFixedHeight(131)
+            MIDDLE_widget.setLayout(MIDDLE_layout)
+            MIDDLE_widget.setObjectName("MIDDLE_widget")    
+            
+            # DISPALY SHUTTLE 1 DASHBOARD
+            dashboard_title_label = QLabel("Shuttle 1 Dashboard")
+            dashboard_title_label.setObjectName("dashboard_title")
+            dashboard_title_label.setAlignment(Qt.AlignCenter)
+            MIDDLE_layout.addWidget(dashboard_title_label)
+            
+            # DISPLAY PLACE YOUR ID IN THE DRIVER READER
+            dashboard_subtext_label = QLabel("Place your driver ID in the reader")
+            dashboard_subtext_label.setObjectName("DASHBOARD_subtext")
+            dashboard_subtext_label.setAlignment(Qt.AlignCenter)
+            MIDDLE_layout.addWidget(dashboard_subtext_label)
+            
+            self.CENTRAL_LAYOUT.addWidget(MIDDLE_widget)     # PUSH
+
+        # Ensure the UI updates
+        self.update()
+        
+        
+    def loading(self, path):
+        self.LOADING = QMovie(path)
+        self.GIF_LOADING_LABEL.setMovie(self.LOADING)
+        self.LOADING.start()
+        
+        
+    def updateLoadingState(self, isLoading):
+        print("GETS HERE")
+        self.isLoading = isLoading

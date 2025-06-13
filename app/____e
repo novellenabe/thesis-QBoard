@@ -1,0 +1,243 @@
+import sys
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+                             QLabel, QLineEdit, QPushButton, QMessageBox, QDialog, QStackedWidget)
+from PyQt5.QtCore import Qt, QSize, QPoint
+
+# Import our custom SessionManager
+from session_manager import SessionManager # Make sure this file is in your directory
+
+# --- Placeholder Widgets for different screens ---
+
+class BaseScreen(QWidget):
+    """
+    A base class for our screens to provide a common interface for loading/refreshing.
+    """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def on_show(self, *args, **kwargs): 
+        """
+        This method will be called when this screen becomes the current active widget.
+        Override it in child classes to implement specific loading logic.
+        """
+        print(f"Screen '{self.__class__.__name__}' is now active (base method).")
+
+class LoggedOutScreen(BaseScreen): # Inherit from BaseScreen
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        layout = QVBoxLayout(self)
+        label = QLabel("Welcome to the app! Please log in.")
+        label.setAlignment(Qt.AlignCenter)
+        label.setStyleSheet("font-size: 20px; color: gray;")
+        layout.addWidget(label)
+
+    def on_show(self):
+        """Specific logic for when LoggedOutScreen is shown."""
+        super().on_show() # Call base method for consistent logging
+        print("LoggedOutScreen: Displaying login prompt.")
+        # No specific data to load here, but you could, e.g., clear a form.
+
+
+class LoggedInScreen(BaseScreen): # Inherit from BaseScreen
+    def __init__(self, session_manager, parent=None):
+        super().__init__(parent)
+        self.session_manager = session_manager
+        layout = QVBoxLayout(self)
+
+        self.welcome_label = QLabel()
+        self.welcome_label.setAlignment(Qt.AlignCenter)
+        self.welcome_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #333;")
+
+        info_label = QLabel("This is your personalized dashboard content.")
+        info_label.setAlignment(Qt.AlignCenter)
+        info_label.setStyleSheet("font-size: 16px; margin-top: 20px;")
+
+        self.dynamic_data_label = QLabel("Loading dynamic data...")
+        self.dynamic_data_label.setStyleSheet("font-size: 14px; color: blue; margin-top: 10px;")
+
+        layout.addStretch()
+        layout.addWidget(self.welcome_label)
+        layout.addWidget(info_label)
+        layout.addSpacing(20)
+        layout.addWidget(self.dynamic_data_label) # Widget to update with loaded data
+        layout.addStretch()
+
+    def update_username(self, username):
+        self.welcome_label.setText(f"Welcome, {username}!")
+
+    def on_show(self):
+        """Specific logic for when LoggedInScreen is shown."""
+        super().on_show() # Call base method for consistent logging
+        current_user = self.session_manager.get_current_username()
+        self.update_username(current_user) # Ensure welcome label is updated
+
+        print(f"LoggedInScreen: Refreshing dashboard for user: {current_user}")
+        # Simulate loading dynamic data
+        self.dynamic_data_label.setText("Fetching new data from server...")
+        # In a real app, you'd trigger an API call or database query here
+        # and update self.dynamic_data_label in its callback/finished signal.
+        # For demo, just set it after a small delay (or immediately)
+        # QTimer.singleShot(1000, lambda: self.dynamic_data_label.setText("Data Loaded: Report X, Metrics Y"))
+        self.dynamic_data_label.setText("Data Loaded: Report X, Metrics Y (from last session)")
+
+
+# --- LoginWindow (Same as before) ---
+class LoginWindow(QDialog):
+    def __init__(self, session_manager, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Login")
+        self.setGeometry(100, 100, 300, 150)
+        self.setFixedSize(300, 150)
+
+        self.session_manager = session_manager
+        self.init_ui()
+
+    def init_ui(self):
+        layout = QVBoxLayout()
+        self.username_input = QLineEdit()
+        self.username_input.setPlaceholderText("Username")
+        self.password_input = QLineEdit()
+        self.password_input.setPlaceholderText("Password")
+        self.password_input.setEchoMode(QLineEdit.Password)
+        self.login_button = QPushButton("Login")
+        self.login_button.clicked.connect(self.attempt_login)
+
+        layout.addWidget(self.username_input)
+        layout.addWidget(self.password_input)
+        layout.addWidget(self.login_button)
+        self.setLayout(layout)
+
+    def attempt_login(self):
+        username = self.username_input.text().strip()
+        password = self.password_input.text()
+
+        if self.session_manager.login(username, password):
+            QMessageBox.information(self, "Login Success", "You have successfully logged in!")
+            self.accept()
+        else:
+            QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
+            self.username_input.clear()
+            self.password_input.clear()
+            self.username_input.setFocus()
+
+# --- MainWindow (with QStackedWidget and screen loading detection) ---
+class MainWindow(QMainWindow):
+    def __init__(self, session_manager):
+        super().__init__()
+        self.setWindowTitle("PyQt5 Session App")
+        self.setGeometry(100, 100, 800, 600)
+
+        self.session_manager = session_manager
+        self._load_window_geometry()
+
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+        self.main_layout = QVBoxLayout(self.central_widget)
+
+        # 1. Header Area
+        self.header_layout = QHBoxLayout()
+        self.app_title_label = QLabel("Your App Name")
+        self.app_title_label.setStyleSheet("font-size: 28px; font-weight: bold; color: #007bff;")
+        self.header_layout.addWidget(self.app_title_label)
+        self.header_layout.addStretch()
+
+        self.action_button = QPushButton()
+        self.action_button.setFixedSize(120, 40)
+        self.action_button.clicked.connect(self._handle_action_button_click)
+        self.header_layout.addWidget(self.action_button)
+        self.main_layout.addLayout(self.header_layout)
+        self.main_layout.addSpacing(10)
+
+        # 2. QStackedWidget for content switching
+        self.stacked_widget = QStackedWidget()
+        self.main_layout.addWidget(self.stacked_widget)
+
+        # Create different screens/pages
+        self.logged_out_page = LoggedOutScreen()
+        self.logged_in_page = LoggedInScreen(self.session_manager)
+
+        self.stacked_widget.addWidget(self.logged_out_page) # Index 0
+        self.stacked_widget.addWidget(self.logged_in_page)  # Index 1
+
+        # --- NEW: Connect currentChanged signal to detect screen loads ---
+        self.stacked_widget.currentChanged.connect(self.on_screen_changed)
+
+        # Connect session manager signals to update UI (and switch screens)
+        self.session_manager.loggedIn.connect(self.update_ui_on_login)
+        self.session_manager.loggedOut.connect(self.update_ui_on_logout)
+
+        # Initial UI update based on current session state
+        if self.session_manager.is_logged_in():
+            self.update_ui_on_login(self.session_manager.get_current_username())
+        else:
+            self.update_ui_on_logout()
+
+    def _load_window_geometry(self):
+        geometry = self.session_manager.settings.value("window/geometry")
+        if geometry:
+            self.restoreGeometry(geometry)
+        window_state = self.session_manager.settings.value("window/state")
+        if window_state:
+            self.restoreState(window_state)
+        else:
+            self.resize(QSize(800, 600))
+            self.move(QPoint(100, 100))
+
+    def _save_window_geometry(self):
+        self.session_manager.settings.setValue("window/geometry", self.saveGeometry())
+        self.session_manager.settings.setValue("window/state", self.saveState())
+
+    def update_ui_on_login(self, username):
+        self.action_button.setText("Logout")
+        self.swtich_to_screen(1) # Switch to LoggedInScreen (index 1)
+        print(f"MainWindow: Triggered UI update for logged in user: {username}")
+
+
+    def update_ui_on_logout(self):
+        self.action_button.setText("Login")
+        self.swtich_to_screen(0) # Switch to LoggedOutScreen (index 0)
+        print("MainWindow: Triggered UI update for logged out state.")
+
+    def _handle_action_button_click(self):
+        if self.session_manager.is_logged_in():
+            self.session_manager.logout()
+        else:
+            self._show_login_dialog()
+
+    def _show_login_dialog(self):
+        login_dialog = LoginWindow(self.session_manager, self)
+        login_dialog.exec_() # Signal from SessionManager handles UI update
+
+    def swtich_to_screen(self, index):
+        """Redirects the program to another screen by setting the current index."""
+        if 0 <= index < self.stacked_widget.count():
+            self.stacked_widget.setCurrentIndex(index)
+            # The on_screen_changed slot will now handle the specific screen logic
+            print(f"MainWindow: Set stacked widget index to {index}")
+        else:
+            print(f"MainWindow: Error: Index {index} is out of bounds for stacked widget.")
+
+    # --- NEW: Slot to handle screen changes and trigger screen-specific logic ---
+    def on_screen_changed(self, index):
+        """
+        This slot is called whenever the QStackedWidget's current screen changes.
+        It triggers the 'on_show' method of the newly active screen.
+        """
+        current_widget = self.stacked_widget.widget(index)
+        if isinstance(current_widget, BaseScreen): # Ensure it's one of our custom screens
+            print(f"MainWindow: Detected screen change to index {index} ({current_widget.__class__.__name__})")
+            current_widget.on_show() # Call the screen's specific loading/refresh logic
+        else:
+            print(f"MainWindow: Screen at index {index} is not a BaseScreen instance.")
+
+
+    def closeEvent(self, event):
+        self._save_window_geometry()
+        event.accept()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    session_manager = SessionManager("MyCompany", "PyQtLoginApp")
+    main_window = MainWindow(session_manager)
+    main_window.show()
+    sys.exit(app.exec_())

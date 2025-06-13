@@ -1,0 +1,148 @@
+import sys
+import os
+import time
+
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QPushButton, QCheckBox, QRadioButton, QButtonGroup, QLineEdit, QSizePolicy)
+from PyQt5.QtGui import QIcon, QPixmap, QMovie, QMouseEvent
+from PyQt5.QtGui import QFont                   # For Fonts
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal         # For alignment
+
+''' ERROR FILE HANDLING '''
+from file_handling import file_handling
+
+# PROBLEM. __init__ only executed once
+class LoginScreen(QtWidgets.QWidget):    
+    switch_screen_signal = pyqtSignal(int)  # Using Signals and Slots for decoupling approach
+    
+    '''
+    def __init__(self, parent=None, initialLoading=False):
+        super().__init__(parent)
+        self.loadStyles()
+        self.isLoading = initialLoading
+        self.LoginScreen()
+    '''
+        
+    def loadStyles(self):
+        stylesheet = file_handling.load_stylesheet("screens/LoginScreen/LoginScreen.css")
+        self.setStyleSheet(stylesheet)
+    
+    def LoginScreen(self):
+        ''' PARENT LAYOUT ''' 
+        SELF_LAYOUT = QVBoxLayout()   
+        SELF_LAYOUT.setSpacing(0)
+        SELF_LAYOUT.setContentsMargins(0, 0, 0, 0)
+        
+        
+        self.CENTRAL_WIDGET = QWidget()
+        self.CENTRAL_WIDGET.setObjectName("CENTRAL_WIDGET")
+        self.CENTRAL_LAYOUT = QVBoxLayout(self.CENTRAL_WIDGET)   
+
+        self.CENTRAL_LAYOUT.setContentsMargins(0, 0, 0, 0)
+        self.CENTRAL_LAYOUT.setSpacing(0)
+
+        SELF_LAYOUT.addWidget(self.CENTRAL_WIDGET)
+        
+        ''' TOP WIDGET '''
+        # DISPALY UNIVERSITY IMAGE
+        UNIVERSITY_LABEL = QLabel(self.CENTRAL_WIDGET)
+        UNIVERSITY_LABEL.setFixedHeight(145)
+        UNIVERSITY_LABEL.setObjectName("university_title")
+        UNIVERSITY_LABEL_pixmap = QPixmap("assets/images/USC_logo.png")
+        scaled_pixmap = UNIVERSITY_LABEL_pixmap.scaled(500, 1000, Qt.KeepAspectRatio)
+        #UNIVERSITY_LABEL.setPixmap(UNIVERSITY_LABEL_pixmap)
+        UNIVERSITY_LABEL.setPixmap(scaled_pixmap)
+        UNIVERSITY_LABEL.setAlignment(Qt.AlignCenter)
+        self.CENTRAL_LAYOUT.addWidget(UNIVERSITY_LABEL)  # PUSH
+        
+        
+        ''' MIDDLE WIDGET '''
+        self.MIDDLE_layout = QVBoxLayout()
+        self.MIDDLE_widget = QWidget()
+        self.MIDDLE_widget.setFixedHeight(131)
+        self.MIDDLE_widget.setLayout(self.MIDDLE_layout)
+        self.MIDDLE_widget.setObjectName("MIDDLE_widget")   
+                
+        self.updateMiddleWidget(self.isLoading)
+
+
+        self.CENTRAL_LAYOUT.addWidget(self.MIDDLE_widget)
+        
+        ''' BOTTOM WIDGET '''
+        BOTTOM_layout = QVBoxLayout()
+        BOTTOM_widget = QWidget()
+        BOTTOM_widget.setLayout(BOTTOM_layout)
+        BOTTOM_widget.setObjectName("bottom_widget")
+        BOTTOM_widget.setFixedHeight(100)
+        self.CENTRAL_LAYOUT.addWidget(BOTTOM_widget)     # PUSH
+        
+        
+        self.setLayout(SELF_LAYOUT)
+        
+        #self.update()
+        
+    def updateMiddleWidget(self, isLoading):
+        self.refreshWidgets()
+        
+        if isLoading:
+            print("Is Loading")
+            self.GIF_LOADING_LABEL = QLabel()
+            self.loading("assets/gif/loading.gif")
+            self.MIDDLE_layout.addWidget(self.GIF_LOADING_LABEL, alignment=Qt.AlignCenter)
+
+            QTimer.singleShot(2000, self.changeScreen)  #   TEMPORARY TIMER FOR LOADING, ACTS AS SIMULATION
+            
+        else:
+            print("Is Not Loading")
+            # DISPALY SHUTTLE 1 DASHBOARD
+            dashboard_title_label = QLabel("Shuttle 1 Dashboard")
+            dashboard_title_label.setObjectName("dashboard_title")
+            dashboard_title_label.setAlignment(Qt.AlignCenter)
+            self.MIDDLE_layout.addWidget(dashboard_title_label)
+            
+            # DISPLAY PLACE YOUR ID IN THE DRIVER READER
+            dashboard_subtext_label = QLabel("Place your driver ID in the reader")
+            dashboard_subtext_label.setObjectName("DASHBOARD_subtext")
+            dashboard_subtext_label.setAlignment(Qt.AlignCenter)
+            self.MIDDLE_layout.addWidget(dashboard_subtext_label)
+            
+        self.update()
+
+        #self.switch_screen_signal.emit(1)
+        
+    #TODO: Fix screen, and timing. Reset loading
+    
+    def mousePressEvent(self, event: QMouseEvent):
+        if event.button() == Qt.LeftButton:
+            self.isLoading = True
+            print("PRESSED")
+     
+    def refreshWidgets(self):
+        print(f"Refresh Widget: {self.MIDDLE_layout.count()}")
+        while self.MIDDLE_layout.count() != 0:
+            item = self.MIDDLE_layout.itemAt(self.MIDDLE_layout.count() - 1)    
+            self.MIDDLE_layout.removeItem(item)
+        
+    def loading(self, path):
+        self.LOADING = QMovie(path)
+        self.GIF_LOADING_LABEL.setMovie(self.LOADING)
+        self.LOADING.start()
+        
+        
+    def updateLoadingState(self, isLoading):
+        print(f"GETS HERE {isLoading}")
+        self.isLoading = isLoading
+        self.updateMiddleWidget(self.isLoading)
+        #time.sleep(2)
+        print("EXECUTED")
+       
+       
+    def changeScreen(self):
+        #self.isLoading = False
+        self.isLoading = False
+        self.updateMiddleWidget(self.isLoading)
+        self.switch_screen_signal.emit(1)      # CHANGE NEXT SCREEN
+    '''    
+    def changeScreen(self, val):
+        print(f"changeScreen {val}")
+    '''
