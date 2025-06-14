@@ -14,6 +14,7 @@ from file_handling import file_handling
 from screens.LoadingScreen.LoadingScreen import LoadingScreen
 from screens.LoginScreen.LoginScreen import LoginScreen
 from screens.MainScreen.MainScreen import MainScreen
+from screens.LogoutScreen.LogoutScreen import LogoutScreen
 
 import time
 
@@ -54,6 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.login_screen = LoginScreen(self, self.isLoading)
         self.login_screen = LoginScreen(self, SESSION_MANAGER=self.auth)
         self.main_screen = MainScreen(self, SESSION_MANAGER=self.auth)
+        self.logout_screen = LogoutScreen(self, SESSION_MANAGER=self.auth)
         #self.loading_screen = LoadingScreen(self)   # TO BE MADE
         
         self.main_screen.switch_screen_signal.connect(self.swtich_to_screen)
@@ -74,9 +76,11 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.auth.loggedOut.connect(self.update_ui_on_logout)
         
         
+        # SCREEN STACK HERE [login, main, logout]
         self.stacked_widget.addWidget(self.login_screen)
-        #self.stacked_widget.addWidget(self.loading_screen)     # NOT FINISHED
         self.stacked_widget.addWidget(self.main_screen)
+        self.stacked_widget.addWidget(self.logout_screen)
+        
         
         
         # NOTE: Connect currentChanged signal to detect screen loads

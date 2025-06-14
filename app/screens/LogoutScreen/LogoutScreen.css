@@ -1,0 +1,38 @@
+#CENTRAL_WIDGET {
+  background-color: white;
+  border: 10px solid #50a747;
+}
+
+#CENTRAL_LAYOUT {
+  background-color: green;
+}
+
+#widgetLayout {
+  background-color: red;
+}
+
+#dashboard_title {
+  font-family: Arial;
+  font-size: 40px;
+  font-weight: bold;
+  color: #50a747;
+  border: none;
+}
+
+#university_title {
+  border: none;
+}
+
+#DASHBOARD_subtext {
+  font-family: Arial;
+  font-size: 28px;
+  font-weight: bold;
+  color: black;
+  border: none;
+}
+
+/*
+#MIDDLE_widget, #bottom_widget {
+	border: none;
+	background-color: red;
+}*/

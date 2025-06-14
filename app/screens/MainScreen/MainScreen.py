@@ -275,7 +275,9 @@ class MainScreen(QtWidgets.QWidget):
     def on_LOGOUT_button_clicked(self):
         print("Hello World")
         self.auth.logout()
-        self.switch_screen_signal.emit(0)
+        #self.switch_screen_signal.emit(0)      # TODO
+        
+        self.switch_screen_signal.emit(2)       # TODO: Make changes here later
         
         # THIS STATE WILL THE BUTTON PERPETUALLY ACTIVE
         '''
