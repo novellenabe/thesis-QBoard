@@ -4,8 +4,14 @@ TO SETUP THE APPLICATION
 2. CLI: activate
 
 
-DOWNLOAD:
+FOR VENV:
+python -m venv venv
 
+
+DOWNLOAD:
+pip install PyQt5
+pip install pyqt5-tools		<-- Optional, but just download anyways
+pip install psutil
 
 
 TO RUN THE APPLICATION
