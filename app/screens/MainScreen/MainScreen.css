@@ -37,17 +37,26 @@
 	padding: 0;
 }
 
-#CURTAINS_TOP_widget, #CURTAINS_BOTTOM {
+#CURTAINS_TOP_widget, #CURTAINS_BOTTOM_widget {
 	background-color: #90E67F;
 }
 
-#BODY_main_content {
+#BODY_main_content_widget {
 	background-color: #ffffff;
 }
 
 #TERMINAL_TITLE, #QUEUEING_PASSENGERS {
 	font-size: 24px;
 	font-weight: bold;
+}
+
+/* For the row elements */
+#INFO_ROW_1_widget {
+	background-color: #C0C0C0;
+}
+
+#TERMINAL_TITLE_N1, #QUEUEING_PASSENGERS_N1 {
+	font-size: 34px;
 }
 
 #TERMINAL_TITLE_widget, #QUEUEING_PASSENGERS_widget {

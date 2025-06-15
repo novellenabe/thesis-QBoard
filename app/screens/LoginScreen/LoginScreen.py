@@ -100,7 +100,8 @@ class LoginScreen(QtWidgets.QWidget):
             self.refreshWidgets()
             print("Is Not Loading")
             # DISPALY SHUTTLE 1 DASHBOARD
-            dashboard_title_label = QLabel("Shuttle 1 Dashboard")
+            #dashboard_title_label = QLabel("Shuttle 1 Dashboard") # FIXME
+            dashboard_title_label = QLabel("QBoard")
             dashboard_title_label.setObjectName("dashboard_title")
             dashboard_title_label.setAlignment(Qt.AlignCenter)
             self.MIDDLE_layout.addWidget(dashboard_title_label)

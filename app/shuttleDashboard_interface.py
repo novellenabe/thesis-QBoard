@@ -63,7 +63,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #TODO: You can remove this later
         #self.loadingChanged.connect(self.login_screen.updateLoadingState)               # IMPORTANT
         self.login_screen.switch_screen_signal.connect(self.swtich_to_screen)
-        
+        self.logout_screen.switch_screen_signal.connect(self.swtich_to_screen)
         
         self.auth.loggedIn.connect(self.update_MainScreen_Content)        
         #self.screenChanged.connect(self.login_screen.changeScreen)                      # TEST
@@ -113,9 +113,9 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # This function will detect if the screen is being changed
     def on_screen_changed(self, index):
-        #current_widget = self.stacked_widget.widget(index)     # TODO: Un-comment this to make dynamic
+        current_widget = self.stacked_widget.widget(index)     # TODO: Un-comment this to make dynamic
         
-        current_widget = self.stacked_widget.widget(1)          # Update trigger currently only set to MainScreen.py
+        #current_widget = self.stacked_widget.widget(1)          # Update trigger currently only set to MainScreen.py
         
         if isinstance(current_widget, QtWidgets.QWidget): # Ensure it's one of our custom screens
             print(f"MainWindow: Detected screen change to index {index} ({current_widget.__class__.__name__})")

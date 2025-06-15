@@ -56,7 +56,7 @@ class MainScreen(QtWidgets.QWidget):
         LOCATION_UNIQUE_ID_layout = QVBoxLayout() 
         LOCATION_UNIQUE_ID_widget = QWidget()
         LOCATION_UNIQUE_ID_widget.setFixedWidth(230)
-        LOCATION_UNIQUE_ID_widget.setFixedHeight(47)
+        LOCATION_UNIQUE_ID_widget.setFixedHeight(48)
 
         LOCATION_UNIQUE_ID_widget.setObjectName("LOCATION_UNIQUE_ID_widget")
         LOCATION_UNIQUE_ID_layout.addWidget(self.LOCATION_UNIQUE_ID)
@@ -124,19 +124,35 @@ class MainScreen(QtWidgets.QWidget):
         
         
         
-        CURTAINS_BOTTOM = QWidget()
-        CURTAINS_BOTTOM.setObjectName("CURTAINS_BOTTOM")
-        CURTAINS_BOTTOM.setFixedHeight(45)
+        CURTAINS_BOTTOM_widget = QWidget()
+        CURTAINS_BOTTOM_widget.setObjectName("CURTAINS_BOTTOM_widget")
+        CURTAINS_BOTTOM_widget.setFixedHeight(45)
         
         
         # TODO: Put destination here
-        BODY_main_content = QWidget()
-        BODY_main_content.setObjectName("BODY_main_content")
-        
+        BODY_main_content_widget = QWidget()
+        BODY_main_content_widget.setObjectName("BODY_main_content_widget")
+        BODY_main_content_layout = QVBoxLayout()
+        BODY_main_content_widget.setLayout(BODY_main_content_layout)
+        BODY_main_content_layout.setAlignment(Qt.AlignTop)
+        BODY_main_content_layout.setContentsMargins(0, 0, 0, 0)
+
         
         # TODO: MAKE THE INDIVIDUAL ROWS
         ######################## DUMMY CONTENT HERE ########################
-    
+
+        # FOR NOW, DATA IS PRELOADED
+        self.dummyData = {"SAS": 2, "SAFAD": 3, "SOE": 3, "PORTAL": 7}
+
+        """ ROW ELEMENT """
+        INFO_ROW_1_widget = QWidget()
+        INFO_ROW_1_widget.setObjectName("INFO_ROW_1_widget")
+        INFO_ROW_1_layout = QHBoxLayout()
+        INFO_ROW_1_layout.setContentsMargins(-0, 0, 20, 0)
+        INFO_ROW_1_layout.setSpacing(0)
+        INFO_ROW_1_widget.setFixedHeight(45)
+        INFO_ROW_1_widget.setLayout(INFO_ROW_1_layout)
+        
         # TERMINAL TITLE
         TERMINAL_TITLE_N1 = QLabel("SAS")  # Number 
         TERMINAL_TITLE_N1.setObjectName("TERMINAL_TITLE_N1")
@@ -149,7 +165,7 @@ class MainScreen(QtWidgets.QWidget):
         TERMINAL_TITLE_N1_widget.setFixedWidth(300)
         TERMINAL_TITLE_N1_widget.setLayout(TERMINAL_TITLE_N1_layout)
         TERMINAL_TITLE_N1_widget.setObjectName("TERMINAL_TITLE_widget")
-        #CURTAINS_TOP_layout.addWidget(TERMINAL_TITLE_N1_widget)        # TODO: ADD TO INDEPENDENT ROW
+        INFO_ROW_1_layout.addWidget(TERMINAL_TITLE_N1_widget)        # TODO: ADD TO INDEPENDENT ROW
         
         # QUEUEING PASSENGERS
         QUEUEING_PASSENGERS_N1 = QLabel("3")     # Number of queuing passengers
@@ -163,14 +179,23 @@ class MainScreen(QtWidgets.QWidget):
         QUEUEING_PASSENGERS_N1_widget.setFixedWidth(300)
         QUEUEING_PASSENGERS_N1_widget.setLayout(QUEUEING_PASSENGERS_N1_layout)
         QUEUEING_PASSENGERS_N1_widget.setObjectName("QUEUEING_PASSENGERS_N1_widget")
-        #CURTAINS_TOP_layout.addWidget(QUEUEING_PASSENGERS_widget)      # TODO: ADD TO INDEPENDENT ROW
+        INFO_ROW_1_layout.addWidget(QUEUEING_PASSENGERS_N1_widget)      # TODO: ADD TO INDEPENDENT ROW
         
         
+        for key, value in self.dummyData.items():
+            #print(f"Key: {key}, Value: {value}")
+            print("Hello world")
+
+
+
+
+        
+        BODY_main_content_layout.addWidget(INFO_ROW_1_widget)       # TODO: Add info rows here
         
         
         BODY_layout.addWidget(CURTAINS_TOP_widget)
-        BODY_layout.addWidget(BODY_main_content)
-        BODY_layout.addWidget(CURTAINS_BOTTOM)
+        BODY_layout.addWidget(BODY_main_content_widget)
+        BODY_layout.addWidget(CURTAINS_BOTTOM_widget)
         
         layout.addWidget(BODY_widget)
         
@@ -274,7 +299,7 @@ class MainScreen(QtWidgets.QWidget):
               
     def on_LOGOUT_button_clicked(self):
         print("Hello World")
-        self.auth.logout()
+        #self.auth.logout()                     # 
         #self.switch_screen_signal.emit(0)      # TODO
         
         self.switch_screen_signal.emit(2)       # TODO: Make changes here later
@@ -309,3 +334,9 @@ class MainScreen(QtWidgets.QWidget):
         self.DRIVERNAME_label.setText(self.auth.get_AppInfo("_username"))
         self.SHUTTLE_label.setText(self.auth.get_AppInfo("_shuttleName"))
         print("Update MainScreen")
+
+
+    # TODO
+    # In the body_content_widget, the elements background must appear in a [#FFFFFF, #C0C0C0, #FFFFFF, #C0C0C0, ...] manner
+    # Make a function to automatically fetch data from database upon login
+    # Make a function that automatically updates number of passenger if there are changes from the evTrak

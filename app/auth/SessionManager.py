@@ -15,13 +15,13 @@ class SessionManager(QObject):
         self._is_logged_in = False
         
         # This is where the information of the evTrak will stored
-        self.__appInfo__ = {
+        self.__appInfo__ = {   
             '_username': None,
             '_shuttleName': None,
             '_ipAddress': None        # IP address from the shuttle. get from network
         }
         
-        
+    
         self._current_username = None
         self._current_shuttlename = None
         # ADD MORE DATA HERE

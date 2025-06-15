@@ -3,6 +3,12 @@ TO SETUP THE APPLICATION
 	>> .venv > Scripts > activate
 2. CLI: activate
 
+FOR GITHUB BULLSHIT:
+1. Clone repo
+2. Give access through token
+3. Set "Contents" to "Read and Write"
+4. When you push it to main repo, it will ask for username and password. <- this only happens when we done any shit yet
+5. username: Github username, password: (TOKEN)
 
 FOR VENV:
 python -m venv venv
